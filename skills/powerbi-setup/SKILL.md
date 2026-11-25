@@ -93,11 +93,11 @@ Ask the user to read it, then ask which way they choose (one question, with a re
 
 | Way | How | Saved? |
 |---|---|---|
-| MCP tool | In the first session **after the restart** (step 7), once the user says "I read it and I accept", call the server's `accept_eula` tool with `eulaUrl` set to the link above | Yes |
+| MCP tool | In the first session **after the restart** (step 7), once the user says "I read it and I accept", call the server's `accept_eula` tool. The argument is nested: `{"request": {"eulaUrl": "https://go.microsoft.com/fwlink/?LinkId=2381247"}}` | Yes |
 | Environment variable | The exact name is `PBI_MODELING_MCP_ACCEPT_EULA`, the value `true`. Do not use any other name, even one you remember: only this one is documented. **Do not set it yourself**; give the user this command, which works from the `!` prompt of Claude Code (bash) and from any terminal: `powershell -NoProfile -Command "[Environment]::SetEnvironmentVariable('PBI_MODELING_MCP_ACCEPT_EULA','true','User')"`. Then the agent must be restarted | Only for the process; the variable stays on the user's account, so it is there each time |
 | Command line | The user adds `--accept-eula` to the server's `args` in their own configuration | No, only for the running process |
 
-Recommend the `accept_eula` tool, because it is the only way that is saved. Call it only after an explicit "I read it and I accept" from the user. Never edit the plugin's own `.mcp.json` to add the flag.
+Recommend the `accept_eula` tool, because it is the only way that is saved. Call it only after an explicit "I read it and I accept" from the user: the tool's own description says the same ("must not be called automatically or speculatively by an AI agent", only after a human reviewed the EULA and explicitly instructed it). Never edit the plugin's own `.mcp.json` to add the flag.
 
 The `accept_eula` tool exists only while the server is connected inside a session, so it cannot be called before the restart: do not write your own script to call it, and do not set a permanent environment variable on the user's behalf (the agent's protections can refuse it, and it changes the user's account). If the user does not want to wait for the restart, give them the environment variable command and let them run it.
 
