@@ -1,0 +1,19 @@
+# Power BI projects and data never belong in this repository
+*.pbix
+*.pbit
+*.pbip
+*.SemanticModel/
+*.Report/
+.pbi/
+
+# Screenshots taken while testing
+*.png
+!docs/*.png
+
+# Local environments and secrets
+.env
+.env.*
+node_modules/
+__pycache__/
+*.pyc
+*.log

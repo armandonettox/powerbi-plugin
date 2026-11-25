@@ -1,0 +1,17 @@
+{
+  "name": "powerbi-plugin",
+  "description": "Power BI plugin for Claude Code: modeling MCP server, authoring and DAX skills, and Desktop screenshots.",
+  "owner": {
+    "name": "armandonettox"
+  },
+  "plugins": [
+    {
+      "name": "powerbi",
+      "description": "Author and inspect Power BI semantic models and report visuals, optimize DAX, and check the result with Desktop screenshots.",
+      "source": "./",
+      "version": "0.1.0",
+      "license": "MIT",
+      "keywords": ["powerbi", "dax", "semantic-model", "mcp", "skill"]
+    }
+  ]
+}
