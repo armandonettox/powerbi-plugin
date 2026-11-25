@@ -15,14 +15,39 @@ using System;
 using System.Runtime.InteropServices;
 public class WinApi {
     [DllImport("user32.dll")]
+    public static extern bool SetProcessDPIAware();
+    [DllImport("user32.dll")]
     public static extern bool SetForegroundWindow(IntPtr hWnd);
     [DllImport("user32.dll")]
     public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
     [DllImport("user32.dll")]
     public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+    public delegate bool EnumProc(IntPtr h, IntPtr l);
+    [DllImport("user32.dll")] public static extern bool EnumWindows(EnumProc cb, IntPtr l);
+    [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr h, out uint pid);
+    [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr h);
+    [DllImport("user32.dll")] public static extern int GetWindowLong(IntPtr h, int index);
     public struct RECT { public int Left; public int Top; public int Right; public int Bottom; }
+    // Biggest visible window of the process, ignoring tool windows such as tooltips:
+    // Process.MainWindowHandle can point at a tooltip that is still on screen
+    public static IntPtr Largest(uint pid) {
+        IntPtr best = IntPtr.Zero; long bestArea = 0;
+        EnumWindows((h, l) => {
+            uint p; GetWindowThreadProcessId(h, out p);
+            if (p != pid || !IsWindowVisible(h)) return true;
+            if ((GetWindowLong(h, -20) & 0x80) != 0) return true;  // WS_EX_TOOLWINDOW
+            RECT r; GetWindowRect(h, out r);
+            long area = (long)(r.Right - r.Left) * (r.Bottom - r.Top);
+            if (area > bestArea) { bestArea = area; best = h; }
+            return true;
+        }, IntPtr.Zero);
+        return best;
+    }
 }
 "@
+
+# Without this, a screen scaled above 100% crops the image in the wrong place
+[WinApi]::SetProcessDPIAware() | Out-Null
 
 # Finds the first process with that name that has a visible window
 $proc = Get-Process -Name $ProcessName -ErrorAction SilentlyContinue |
@@ -34,7 +59,8 @@ if (-not $proc) {
     exit 1
 }
 
-$hwnd = $proc.MainWindowHandle
+$hwnd = [WinApi]::Largest([uint32]$proc.Id)
+if ($hwnd -eq [IntPtr]::Zero) { $hwnd = $proc.MainWindowHandle }
 
 # Restores the window if it is minimized and brings it to the front
 [WinApi]::ShowWindow($hwnd, 9) | Out-Null  # SW_RESTORE

@@ -100,6 +100,15 @@ It copies the area of the screen where the window is, after bringing the window 
 - Windows only, and Desktop must have a visible window: with Desktop closed the scripts exit with an error.
 - Coordinates depend on the window size and on the screen scaling. After the user resizes the window or moves it to another screen, take a new snapshot before choosing points.
 - Hover and click scripts can fail silently when the first mouse move after a focus change is lost; `hover-batch.ps1` repeats the approach and prints where the cursor really arrived, so read that line.
+- The scripts that copy the screen (`hover-screenshot.ps1`, `hover-batch.ps1`, `capture-screenshot.ps1`) copy the rectangle of the window, and the Windows frame has a few invisible pixels at the edges: whatever is behind the window can show in those edges. A maximized Desktop has no such strip, and `bg-capture.ps1` never has it.
+- The scripts pick the largest visible window of the process and ignore tool windows such as tooltips, so a tooltip left on screen does not become "the window" to capture.
+- All four scripts declare that they respect the screen scaling. Without it, a screen scaled above 100% puts the cursor and the crop in the wrong place.
 - The images may contain data: save them in a temporary folder and delete them when the check is done.
+
+## What was tested
+
+The four scripts were run against a neutral test window with a button, a bar with a tooltip and a scrolling list, which logged the real mouse events it received. Hover reached the bar and the tooltip appeared in the image, the click changed the page, the wheel scrolled the list, the cursor was given back, and every image had the exact size of the window. That run also found and fixed two defects: a missing DPI declaration, and the choice of a leftover tooltip as the window to capture.
+
+It was not run against Power BI Desktop. What is specific to it was written and used by the author, but is not covered by that test: hovering a visual with `-HoverX`/`-HoverY` through window messages, Ctrl+click on report buttons, and the way its own tooltips are drawn.
 
 **Motivation:** a report change can look right in the JSON and still render wrong (a hidden field, a wrong theme, a visual outside the page, a tooltip showing the wrong measure). Looking at the real window is the cheapest way to catch it. The scripts exist in four levels of invasiveness because a capture that takes over the user's mouse has a cost, and most checks do not need it.

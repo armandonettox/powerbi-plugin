@@ -51,7 +51,7 @@ If the argument is `check`, only report (steps 1 to 3 and 6) and change nothing.
 
    Then run `claude plugin list` again and confirm the new version. Tell the user the new version loads on the next start, or right away after `/reload-plugins`. If the update command reports an error, show it as is and stop: do not retry in a loop or remove the plugin.
 
-6. **Auto-update status.** Read `~/.claude/plugins/known_marketplaces.json`, find `powerbi-plugin` and report its `autoUpdate` value (empty means the default, which is off for third-party marketplaces). If it is off, explain how to turn it on: run `/plugin`, open the **Marketplaces** tab, select `powerbi-plugin` and turn auto-update on. Do not edit the file.
+6. **Auto-update status.** Check two places and report the first one that has a value: (1) `autoUpdate` on the `powerbi-plugin` entry of `extraKnownMarketplaces` in `~/.claude/settings.json`; (2) `autoUpdate` on its entry in `~/.claude/plugins/known_marketplaces.json`. If neither has a value, the default applies, which is off for third-party marketplaces. If it is off, explain how to turn it on: run `/plugin`, open the **Marketplaces** tab, select `powerbi-plugin` and turn auto-update on. Do not edit either file.
 
 ## Why each step exists
 
@@ -59,3 +59,4 @@ If the argument is `check`, only report (steps 1 to 3 and 6) and change nothing.
 - **Confirmation before updating:** an update replaces the installed skills and the MCP entry that other work depends on.
 - **Update both the marketplace and the plugin:** refreshing the marketplace only refreshes the listing; the plugin stays on its current version until it is updated.
 - **Report the auto-update status instead of changing it:** third-party marketplaces start with it off, and the user is the one who decides to turn it on.
+- **Check the settings file before the marketplace file:** a value on the `extraKnownMarketplaces` entry in settings wins over the one in `known_marketplaces.json`, so reading only the second can report the wrong status.

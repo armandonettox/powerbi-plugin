@@ -26,6 +26,26 @@ public class HbApi {
     [DllImport("user32.dll")] public static extern bool IsIconic(IntPtr h);
     [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr h, int cmd);
     [DllImport("user32.dll")] public static extern void keybd_event(byte vk, byte scan, uint flags, UIntPtr extra);
+    public delegate bool EnumProc(IntPtr h, IntPtr l);
+    [DllImport("user32.dll")] public static extern bool EnumWindows(EnumProc cb, IntPtr l);
+    [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr h, out uint pid);
+    [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr h);
+    [DllImport("user32.dll")] public static extern int GetWindowLong(IntPtr h, int index);
+    // Biggest visible window of the process, ignoring tool windows such as tooltips:
+    // Process.MainWindowHandle can point at a tooltip that is still on screen
+    public static IntPtr Largest(uint pid) {
+        IntPtr best = IntPtr.Zero; long bestArea = 0;
+        EnumWindows((h, l) => {
+            uint p; GetWindowThreadProcessId(h, out p);
+            if (p != pid || !IsWindowVisible(h)) return true;
+            if ((GetWindowLong(h, -20) & 0x80) != 0) return true;  // WS_EX_TOOLWINDOW
+            RECT r; GetWindowRect(h, out r);
+            long area = (long)(r.Right - r.Left) * (r.Bottom - r.Top);
+            if (area > bestArea) { bestArea = area; best = h; }
+            return true;
+        }, IntPtr.Zero);
+        return best;
+    }
     // Alt tap lets SetForegroundWindow work from a background process
     public static void Activate(IntPtr h) {
         keybd_event(0x12, 0, 0, UIntPtr.Zero); keybd_event(0x12, 0, 2, UIntPtr.Zero);
@@ -64,7 +84,8 @@ public class HbApi {
 
 $proc = Get-Process -Name PBIDesktop -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne 0 } | Select-Object -First 1
 if (-not $proc) { Write-Error "PBIDesktop has no visible window."; exit 1 }
-$hwnd = $proc.MainWindowHandle
+$hwnd = [HbApi]::Largest([uint32]$proc.Id)
+if ($hwnd -eq [IntPtr]::Zero) { $hwnd = $proc.MainWindowHandle }
 if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force $OutDir | Out-Null }
 
 $saved = New-Object HbApi+POINT

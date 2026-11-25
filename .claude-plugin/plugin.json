@@ -1,7 +1,7 @@
 {
   "name": "powerbi",
   "description": "Power BI for Claude Code: the Microsoft Power BI Modeling MCP server, skills for authoring semantic models and report visuals, DAX performance optimization, and screenshots of Power BI Desktop to check the result.",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "author": {
     "name": "armandonettox"
   },

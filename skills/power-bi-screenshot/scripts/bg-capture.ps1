@@ -23,6 +23,25 @@ public class BgApi {
     [DllImport("user32.dll")] public static extern int GetClassName(IntPtr h, StringBuilder s, int n);
     [DllImport("user32.dll")] public static extern bool PostMessage(IntPtr h, uint msg, IntPtr w, IntPtr l);
     public struct RECT { public int Left, Top, Right, Bottom; }
+    [DllImport("user32.dll")] public static extern bool EnumWindows(EnumProc cb, IntPtr l);
+    [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr h, out uint pid);
+    [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr h);
+    [DllImport("user32.dll")] public static extern int GetWindowLong(IntPtr h, int index);
+    // Biggest visible window of the process, ignoring tool windows such as tooltips:
+    // Process.MainWindowHandle can point at a tooltip that is still on screen
+    public static IntPtr Largest(uint pid) {
+        IntPtr best = IntPtr.Zero; long bestArea = 0;
+        EnumWindows((h, l) => {
+            uint p; GetWindowThreadProcessId(h, out p);
+            if (p != pid || !IsWindowVisible(h)) return true;
+            if ((GetWindowLong(h, -20) & 0x80) != 0) return true;  // WS_EX_TOOLWINDOW
+            RECT r; GetWindowRect(h, out r);
+            long area = (long)(r.Right - r.Left) * (r.Bottom - r.Top);
+            if (area > bestArea) { bestArea = area; best = h; }
+            return true;
+        }, IntPtr.Zero);
+        return best;
+    }
     public static List<IntPtr> Widgets(IntPtr parent) {
         var l = new List<IntPtr>();
         EnumChildWindows(parent, (h, x) => { var sb = new StringBuilder(256); GetClassName(h, sb, 256);
@@ -35,7 +54,8 @@ public class BgApi {
 
 $proc = Get-Process -Name PBIDesktop -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne 0 } | Select-Object -First 1
 if (-not $proc) { Write-Error "PBIDesktop has no visible window."; exit 1 }
-$hwnd = $proc.MainWindowHandle
+$hwnd = [BgApi]::Largest([uint32]$proc.Id)
+if ($hwnd -eq [IntPtr]::Zero) { $hwnd = $proc.MainWindowHandle }
 
 function Save-Window($h, $path) {
     $r = New-Object BgApi+RECT; [BgApi]::GetWindowRect($h, [ref]$r) | Out-Null

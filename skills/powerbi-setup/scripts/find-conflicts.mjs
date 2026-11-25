@@ -182,7 +182,24 @@ function walk(dir, depth, found) {
   }
 }
 
-for (const root of SKILL_ROOTS) {
+// The same folder can be reached twice (for example when the agent runs in the home folder),
+// so each real folder is scanned once.
+function uniqueByRealPath(items, pick) {
+  const seen = new Set();
+  return items.filter((item) => {
+    let real;
+    try {
+      real = fs.realpathSync.native(pick(item)).toLowerCase();
+    } catch {
+      return false;
+    }
+    if (seen.has(real)) return false;
+    seen.add(real);
+    return true;
+  });
+}
+
+for (const root of uniqueByRealPath(SKILL_ROOTS, (r) => r.dir)) {
   const found = [];
   walk(root.dir, 0, found);
   for (const skill of found) {
@@ -204,12 +221,15 @@ for (const root of SKILL_ROOTS) {
 }
 
 // Permission rules that name the old, non-plugin server
-for (const file of [
-  path.join(home, ".claude", "settings.json"),
-  path.join(home, ".claude", "settings.local.json"),
-  path.join(cwd, ".claude", "settings.json"),
-  path.join(cwd, ".claude", "settings.local.json"),
-]) {
+for (const file of uniqueByRealPath(
+  [
+    path.join(home, ".claude", "settings.json"),
+    path.join(home, ".claude", "settings.local.json"),
+    path.join(cwd, ".claude", "settings.json"),
+    path.join(cwd, ".claude", "settings.local.json"),
+  ],
+  (f) => f
+)) {
   const settings = readJson(file);
   const rules = [];
   for (const list of Object.values((settings && settings.permissions) || {})) {

@@ -16,6 +16,7 @@ Add-Type @"
 using System;
 using System.Runtime.InteropServices;
 public class HoverApi {
+    [DllImport("user32.dll")] public static extern bool SetProcessDPIAware();
     [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr hWnd);
     [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
     [DllImport("user32.dll")] public static extern bool GetWindowRect(IntPtr hWnd, out RECT r);
@@ -26,6 +27,26 @@ public class HoverApi {
     public struct MOUSEINPUT { public int dx; public int dy; public uint mouseData; public uint dwFlags; public uint time; public IntPtr dwExtraInfo; }
     [StructLayout(LayoutKind.Sequential)]
     public struct INPUT { public uint type; public MOUSEINPUT mi; }
+    public delegate bool EnumProc(IntPtr h, IntPtr l);
+    [DllImport("user32.dll")] public static extern bool EnumWindows(EnumProc cb, IntPtr l);
+    [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr h, out uint pid);
+    [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr h);
+    [DllImport("user32.dll")] public static extern int GetWindowLong(IntPtr h, int index);
+    // Biggest visible window of the process, ignoring tool windows such as tooltips:
+    // Process.MainWindowHandle can point at a tooltip that is still on screen
+    public static IntPtr Largest(uint pid) {
+        IntPtr best = IntPtr.Zero; long bestArea = 0;
+        EnumWindows((h, l) => {
+            uint p; GetWindowThreadProcessId(h, out p);
+            if (p != pid || !IsWindowVisible(h)) return true;
+            if ((GetWindowLong(h, -20) & 0x80) != 0) return true;  // WS_EX_TOOLWINDOW
+            RECT r; GetWindowRect(h, out r);
+            long area = (long)(r.Right - r.Left) * (r.Bottom - r.Top);
+            if (area > bestArea) { bestArea = area; best = h; }
+            return true;
+        }, IntPtr.Zero);
+        return best;
+    }
     const uint MOVE = 0x0001, ABSOLUTE = 0x8000, VIRTUALDESK = 0x4000;
     public static void MoveTo(int x, int y) {
         int vx = GetSystemMetrics(76), vy = GetSystemMetrics(77), vw = GetSystemMetrics(78), vh = GetSystemMetrics(79);
@@ -39,11 +60,15 @@ public class HoverApi {
 }
 "@
 
+# Without this, a screen scaled above 100% moves the cursor and crops the image in the wrong place
+[HoverApi]::SetProcessDPIAware() | Out-Null
+
 $proc = Get-Process -Name $ProcessName -ErrorAction SilentlyContinue |
     Where-Object { $_.MainWindowHandle -ne 0 } | Select-Object -First 1
 if (-not $proc) { Write-Error "Process '$ProcessName' was not found or has no visible window."; exit 1 }
 
-$hwnd = $proc.MainWindowHandle
+$hwnd = [HoverApi]::Largest([uint32]$proc.Id)
+if ($hwnd -eq [IntPtr]::Zero) { $hwnd = $proc.MainWindowHandle }
 [HoverApi]::ShowWindow($hwnd, 9) | Out-Null
 [HoverApi]::SetForegroundWindow($hwnd) | Out-Null
 Start-Sleep -Milliseconds 400
