@@ -9,6 +9,7 @@
 # Screenshots taken while testing
 *.png
 !docs/*.png
+!.claude-plugin/icon.png
 
 # Local environments and secrets
 .env
