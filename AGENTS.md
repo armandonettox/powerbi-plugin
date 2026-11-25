@@ -14,8 +14,9 @@ Plugin do Claude Code para Power BI: servidor MCP da Microsoft (`.mcp.json`, via
 - `.mcp.json`: sobe o `powerbi-modeling-mcp` com `cmd /c npx -y @microsoft/powerbi-modeling-mcp@<versão> --start`.
 - `skills/powerbi-mcp/`: `SKILL.md` e `references/` (24 arquivos). Origem: `semantic-model-authoring` da Microsoft, traduzida, limpa e estendida.
 - `skills/power-bi-dax-optimization/`: cópia sem mudanças da skill do `github/awesome-copilot`.
-- `skills/power-bi-screenshot/`: `SKILL.md` e `scripts/capture-screenshot.ps1`.
+- `skills/power-bi-screenshot/`: `SKILL.md` e 4 scripts em `scripts/`: `bg-capture.ps1` (segundo plano, padrão), `hover-screenshot.ps1` (um tooltip), `hover-batch.ps1` (vários pontos, rolagem e cliques) e `capture-screenshot.ps1` (simples). Os scripts de hover e clique assumem o mouse do usuário: a skill manda perguntar antes de usá-los.
 - `skills/powerbi-setup/`: `SKILL.md` (instalação guiada por agente), `references/agents.md` (Claude Code testado; Codex e outros marcados como não testados), `references/troubleshooting.md` e `scripts/check-mcp.mjs` (sobe o servidor, faz o handshake MCP e lista as ferramentas; não aceita licença).
+- `commands/update.md`: comando `/powerbi:update` (compara a versão instalada com a do `plugin.json` na `main`, mostra as notas da release, atualiza só com confirmação e informa o `autoUpdate`; o argumento `check` só relata). Só mexe em `powerbi@powerbi-plugin` e no marketplace `powerbi-plugin`.
 - `README.md` (inglês, principal) e `README.pt-BR.md` (português). Imagens em `docs/`; os diagramas em português ficam em `docs/pt-BR/` (gerados a partir dos SVGs em inglês).
 - `LICENSE` (MIT do dono) e `NOTICE` (créditos e texto MIT de Microsoft e GitHub).
 
@@ -54,6 +55,8 @@ Plugin do Claude Code para Power BI: servidor MCP da Microsoft (`.mcp.json`, via
 9. **A versão do servidor MCP vive em três lugares e muda junto:** `.mcp.json`, o valor padrão de `skills/powerbi-setup/scripts/check-mcp.mjs` e os exemplos de `skills/powerbi-setup/references/agents.md`. Depois de trocar, rodar o `check-mcp.mjs` e conferir `OK`. **Motivação:** uma versão diferente na skill de instalação faz o agente verificar um servidor que não é o que o plugin sobe, e o `OK` perde o valor.
 
 10. **Só o Claude Code é "suportado e testado".** Codex e outros agentes ficam descritos como "melhor esforço, não testado pelo autor" no README, no SKILL.md e no `agents.md`, até alguém testar de verdade. A skill de instalação nunca aceita o EULA nem muda configuração global fora dos passos escritos. **Motivação:** prometer suporte que não foi verificado vira reclamação de usuário, e um instalador que improvisa é o mais perigoso, porque o arquivo pode ser lido de uma URL por um agente.
+
+11. **Toda entrega sobe `version` em `plugin.json` e `marketplace.json`, e depois vem a release.** O Claude Code decide se há atualização pela `version`, não pela página de releases nem pelos commits; marketplace de terceiros vem com a atualização automática desligada e o `marketplace.json` não tem campo para ligar. Commit novo sem subir a versão não chega a quem já instalou. O README (as duas línguas) explica como ligar o automático e como atualizar à mão. **Motivação:** sem subir o número, a pessoa fica numa versão velha sem saber, e a release publicada parece mais nova do que o que ela tem instalado.
 
 ## Referência
 - AGENTS.md global (`~/AGENTS.md`) e pessoal (`~/armandonettox/AGENTS.md`): regras gerais de commits (em português, sem atribuição de IA), comentários, emojis e nomes.

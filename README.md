@@ -27,8 +27,9 @@
 | **MCP server** `powerbi-modeling-mcp` | Microsoft's server to read and change a semantic model: tables, columns, measures, relationships, DAX queries, partitions, security roles and more. Started with `npx`, never bundled. |
 | **Skill** `powerbi-mcp` | Picks the right tool and method to author or inspect a model, DAX and report visuals (PBIR). Ships with 24 reference files: DAX patterns, modeling rules, TMDL, PBIP, and a catalog of common errors with how to prevent them. |
 | **Skill** `power-bi-dax-optimization` | Analyzes a DAX formula and proposes a faster, more readable version. |
-| **Skill** `power-bi-screenshot` | Takes a screenshot of the open Power BI Desktop window so a change can be checked by looking at it. |
+| **Skill** `power-bi-screenshot` | Takes screenshots of the open Power BI Desktop window, including tooltips shown on hover, and can scroll and click through report pages, so a change can be checked by looking at it. Four scripts, from a silent background capture to a hover-and-click batch. |
 | **Skill** `powerbi-setup` | Installs and configures the plugin until it works, then proves it with a check. Meant to be driven by an agent. |
+| **Command** `/powerbi:update` | Checks whether a newer version exists, shows the release notes, and updates only after you confirm. |
 
 <p align="center">
   <img src="docs/architecture.svg" alt="How the plugin connects Claude Code to Power BI Desktop, PBIP files and Fabric" width="900">
@@ -105,6 +106,7 @@ Open a model in Power BI Desktop and ask, for example:
 - "Create a year-to-date sales measure and put it in the measures table."
 - "Why is this matrix slow? Optimize the measure."
 - "Take a screenshot of the report and tell me if the legend overlaps the chart."
+- "Hover over the tallest bar and show me its tooltip."
 
 The `powerbi-mcp` skill loads on its own when the request is about a semantic model, DAX or a report visual.
 
@@ -113,7 +115,7 @@ The `powerbi-mcp` skill loads on its own when the request is about a semantic mo
 - **Asks before risky steps.** Refresh and report-JSON edits with the model open need your go-ahead each time. One authorization covers one action, not the next.
 - **Context guard.** Stops before connecting when the file or workspace looks like data from another context.
 - **Your data stays with you.** The plugin contains no data, no credentials and no Power BI files. The server runs on your machine.
-- **Screenshots show what is on screen.** The capture script copies the area where the Desktop window is. If Windows blocks bringing the window to the front, another window on top can appear in the image. Check the image before sharing it.
+- **Screenshots show what is on screen, including data.** The default script (`bg-capture.ps1`) captures in the background and does not touch your mouse. The hover and click scripts take over the cursor while they run and can click inside the report, so the skill asks before using them. Check an image before sharing it.
 - **Telemetry.** The authoring skill comes from Microsoft and keeps its original requirement of an `x-ms-fabric-skill` header on Fabric API calls.
 
 ## Troubleshooting
@@ -123,8 +125,18 @@ The `powerbi-mcp` skill loads on its own when the request is about a semantic mo
 | The tools do not work on first use | Make sure you accepted the EULA (see above). The variable and the flag must be present every time the server starts. |
 | Tools fail after reopening Desktop | The connection is lost and the port changes. Ask Claude to list the local instances and connect again. |
 | `npx` is not found | Install Node.js and restart Claude Code. |
-| Screenshot shows the wrong window | Close or move the window covering Desktop and run it again. |
+| Screenshot shows the wrong window | Ask for the background capture (`bg-capture.ps1`), which captures Desktop even when another window covers it. The simple script (`capture-screenshot.ps1`) copies the screen area, so close or move the covering window. |
 | You want a newer server version | The version is pinned in `.mcp.json`. Change it after reading Microsoft's release notes. |
+
+## Updates
+
+Claude Code does not update third-party plugins by itself unless you turn it on.
+
+- **With the command:** run `/powerbi:update`. It shows the installed and the latest version and the release notes, updates after you say yes, and tells you whether auto-update is on. `/powerbi:update check` only reports and changes nothing.
+- **Automatic:** in Claude Code run `/plugin`, open the **Marketplaces** tab, select `powerbi-plugin` and turn auto-update on. After that, Claude Code checks shortly after a session starts and tells you when a new version was installed (`/reload-plugins` applies it; otherwise it loads on the next start).
+- **Manual:** `/plugin marketplace update powerbi-plugin`, then `claude plugin update powerbi@powerbi-plugin`, then restart or run `/reload-plugins`.
+
+Claude Code reads the `version` in `plugin.json`, not the GitHub release page: a new version reaches you when that number goes up. Release notes are on the [releases page](https://github.com/armandonettox/powerbi-plugin/releases).
 
 ## Credits and licenses
 

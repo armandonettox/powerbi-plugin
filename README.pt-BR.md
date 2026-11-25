@@ -27,8 +27,9 @@
 | **Servidor MCP** `powerbi-modeling-mcp` | Servidor da Microsoft para ler e alterar um modelo semântico: tabelas, colunas, medidas, relacionamentos, consultas DAX, partições, funções de segurança e mais. É iniciado com `npx` e nunca vem embutido. |
 | **Skill** `powerbi-mcp` | Escolhe a ferramenta e o método certos para criar ou inspecionar um modelo, DAX e visuais de relatório (PBIR). Traz 24 arquivos de referência: padrões de DAX, regras de modelagem, TMDL, PBIP e um catálogo de erros comuns com a forma de evitá-los. |
 | **Skill** `power-bi-dax-optimization` | Analisa uma fórmula DAX e propõe uma versão mais rápida e legível. |
-| **Skill** `power-bi-screenshot` | Tira uma captura de tela da janela do Power BI Desktop aberta, para conferir uma alteração olhando o resultado. |
+| **Skill** `power-bi-screenshot` | Tira capturas de tela da janela do Power BI Desktop aberta, inclusive das dicas de ferramenta (tooltips) que aparecem ao passar o mouse, e pode rolar e clicar entre as páginas do relatório, para conferir uma alteração olhando o resultado. Quatro scripts, da captura silenciosa em segundo plano até um lote de passar o mouse e clicar. |
 | **Skill** `powerbi-setup` | Instala e configura o plugin até funcionar e prova com uma verificação. Feita para ser conduzida por um agente. |
+| **Comando** `/powerbi:update` | Confere se existe versão mais nova, mostra as notas da release e atualiza só depois que você confirma. |
 
 <p align="center">
   <img src="docs/pt-BR/architecture.svg" alt="Como o plugin liga o Claude Code ao Power BI Desktop, a arquivos PBIP e ao Fabric" width="900">
@@ -105,6 +106,7 @@ Abra um modelo no Power BI Desktop e peça, por exemplo:
 - "Crie uma medida de vendas acumuladas no ano e coloque na tabela de medidas."
 - "Por que esta matriz está lenta? Otimize a medida."
 - "Tire uma captura de tela do relatório e diga se a legenda cobre o gráfico."
+- "Passe o mouse na barra mais alta e me mostre a dica de ferramenta dela."
 
 A skill `powerbi-mcp` carrega sozinha quando o pedido é sobre modelo semântico, DAX ou visual de relatório.
 
@@ -113,7 +115,7 @@ A skill `powerbi-mcp` carrega sozinha quando o pedido é sobre modelo semântico
 - **Pergunta antes de passos arriscados.** Atualizar dados (Refresh) e editar o JSON do relatório com o modelo aberto exigem o seu aval a cada vez. Uma autorização vale para uma ação, não para a próxima.
 - **Trava de contexto.** Para antes de conectar quando o arquivo ou o workspace parece dado de outro contexto.
 - **Seus dados ficam com você.** O plugin não contém dados, credenciais nem arquivos do Power BI. O servidor roda na sua máquina.
-- **A captura mostra o que está na tela.** O script copia a área onde a janela do Desktop está. Se o Windows impedir de trazer a janela para a frente, outra janela por cima pode aparecer na imagem. Confira a imagem antes de compartilhar.
+- **A captura mostra o que está na tela, inclusive dados.** O script padrão (`bg-capture.ps1`) captura em segundo plano e não mexe no seu mouse. Os scripts de passar o mouse e de clicar assumem o cursor enquanto rodam e podem clicar dentro do relatório, por isso a skill pergunta antes de usá-los. Confira a imagem antes de compartilhar.
 - **Telemetria.** A skill de autoria vem da Microsoft e mantém a exigência original do cabeçalho `x-ms-fabric-skill` nas chamadas à API do Fabric.
 
 ## Solução de problemas
@@ -123,8 +125,18 @@ A skill `powerbi-mcp` carrega sozinha quando o pedido é sobre modelo semântico
 | As ferramentas não funcionam no primeiro uso | Confirme que você aceitou o EULA (veja acima). A variável e a flag precisam estar presentes toda vez que o servidor inicia. |
 | As ferramentas falham depois de reabrir o Desktop | A conexão se perde e a porta muda. Peça ao Claude para listar as instâncias locais e conectar de novo. |
 | O `npx` não é encontrado | Instale o Node.js e reinicie o Claude Code. |
-| A captura mostra a janela errada | Feche ou mova a janela que cobre o Desktop e rode de novo. |
+| A captura mostra a janela errada | Peça a captura em segundo plano (`bg-capture.ps1`), que captura o Desktop mesmo com outra janela por cima. O script simples (`capture-screenshot.ps1`) copia a área da tela, então feche ou mova a janela que o cobre. |
 | Você quer uma versão mais nova do servidor | A versão está fixada no `.mcp.json`. Troque depois de ler as notas de versão da Microsoft. |
+
+## Atualizações
+
+O Claude Code não atualiza plugins de terceiros sozinho, a menos que você ligue isso.
+
+- **Pelo comando:** rode `/powerbi:update`. Ele mostra a versão instalada, a mais nova e as notas da release, atualiza depois que você diz sim e informa se a atualização automática está ligada. `/powerbi:update check` só relata e não altera nada.
+- **Automático:** no Claude Code rode `/plugin`, abra a aba **Marketplaces**, selecione `powerbi-plugin` e ligue a atualização automática. Depois disso, o Claude Code confere logo depois que uma sessão começa e avisa quando instalou uma versão nova (`/reload-plugins` aplica; senão ela carrega no próximo início).
+- **Manual:** `/plugin marketplace update powerbi-plugin`, depois `claude plugin update powerbi@powerbi-plugin`, e reinicie ou rode `/reload-plugins`.
+
+O Claude Code lê a `version` do `plugin.json`, não a página de releases do GitHub: uma versão nova chega até você quando esse número sobe. As notas de cada versão estão na [página de releases](https://github.com/armandonettox/powerbi-plugin/releases).
 
 ## Créditos e licenças
 
