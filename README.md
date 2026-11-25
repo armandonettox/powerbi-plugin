@@ -127,6 +127,7 @@ The `powerbi-mcp` skill loads on its own when the request is about a semantic mo
 | The tools do not work on first use | Make sure you accepted the EULA (see above). The variable and the flag must be present every time the server starts. |
 | Tools fail after reopening Desktop | The connection is lost and the port changes. Ask Claude to list the local instances and connect again. |
 | `npx` is not found | Install Node.js and restart Claude Code. |
+| The server shows "connection timed out after 30000ms" | It is slow to start on a busy machine (on the author's, 24 to 31 s). Close heavy programs and retry, or start Claude Code with a longer limit, for example `MCP_TIMEOUT=90000` (milliseconds), which made it connect there. Values above 60 s may not be honored. |
 | Screenshot shows the wrong window | Ask for the background capture (`bg-capture.ps1`), which captures Desktop even when another window covers it. The simple script (`capture-screenshot.ps1`) copies the screen area, so close or move the covering window. |
 | You want a newer server version | The version is pinned in `.mcp.json`. Change it after reading Microsoft's release notes. |
 
