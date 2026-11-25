@@ -28,6 +28,7 @@
 | **Skill** `powerbi-mcp` | Picks the right tool and method to author or inspect a model, DAX and report visuals (PBIR). Ships with 24 reference files: DAX patterns, modeling rules, TMDL, PBIP, and a catalog of common errors with how to prevent them. |
 | **Skill** `power-bi-dax-optimization` | Analyzes a DAX formula and proposes a faster, more readable version. |
 | **Skill** `power-bi-screenshot` | Takes a screenshot of the open Power BI Desktop window so a change can be checked by looking at it. |
+| **Skill** `powerbi-setup` | Installs and configures the plugin until it works, then proves it with a check. Meant to be driven by an agent. |
 
 <p align="center">
   <img src="docs/architecture.svg" alt="How the plugin connects Claude Code to Power BI Desktop, PBIP files and Fabric" width="900">
@@ -47,6 +48,25 @@ In Claude Code:
 ```
 
 If the skills or the MCP server do not show up right after installing, restart Claude Code.
+
+### Install with an agent
+
+Prefer to let an agent do it? Paste this into your agent:
+
+```text
+Install the Power BI plugin on this computer by following the instructions at
+https://raw.githubusercontent.com/armandonettox/powerbi-plugin/main/skills/powerbi-setup/SKILL.md
+Tell me what you will change before you change it, and do not accept any license agreement for me.
+```
+
+The agent reads the `powerbi-setup` skill, checks Node.js, installs, asks you to read and accept the Microsoft license yourself, and ends by running a check that proves the server starts.
+
+| Agent | Status |
+|---|---|
+| Claude Code | Supported and tested |
+| Codex and other agents | Best effort, not tested by the author. The skill gives the steps and always ends with the same check, which tells you whether it worked. |
+
+The link points to a file in this repository. Open it first if you want to see what your agent will be told to do.
 
 ### Requirements
 

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 440" role="img" aria-labelledby="t d">
   <title id="t">Como o plugin powerbi liga o Claude Code ao Power BI</title>
-  <desc id="d">O Claude Code usa três skills e o servidor MCP de modelagem do Power BI que vêm no plugin. O servidor lê e altera um modelo aberto no Power BI Desktop, arquivos PBIP e TMDL em disco ou um workspace do Fabric. A skill de captura registra a janela do Desktop.</desc>
+  <desc id="d">O Claude Code usa quatro skills e o servidor MCP de modelagem do Power BI que vêm no plugin. O servidor lê e altera um modelo aberto no Power BI Desktop, arquivos PBIP e TMDL em disco ou um workspace do Fabric. A skill de captura registra a janela do Desktop e a skill de instalação instala e confere o plugin.</desc>
   <style>
     :root { --bg:#F7F8FA; --ink:#1A1F2B; --muted:#5A6272; --accent:#4F5BD5; --data:#E8A317; --ok:#2E9E6B; --card:#FFFFFF; --line:#C9CEDA; --accent-soft:#E9EBFB; --data-soft:#FCF2DA; }
     @media (prefers-color-scheme: dark) {
@@ -27,24 +27,28 @@
   <text class="s" x="115" y="228" text-anchor="middle">seu pedido em</text>
   <text class="s" x="115" y="246" text-anchor="middle">linguagem natural</text>
 
-  <rect class="plugin" x="260" y="40" width="360" height="360" rx="16"/>
-  <text class="lbl" x="280" y="68">plugin powerbi</text>
+  <rect class="plugin" x="260" y="24" width="360" height="396" rx="16"/>
+  <text class="lbl" x="280" y="50">plugin powerbi</text>
 
-  <rect class="skill" x="285" y="88" width="310" height="62" rx="10"/>
-  <text class="h" x="300" y="113">powerbi-mcp</text>
-  <text class="s" x="300" y="133">escolhe a ferramenta; modelos, DAX, visuais</text>
+  <rect class="skill" x="285" y="64" width="310" height="56" rx="10"/>
+  <text class="h" x="300" y="88">powerbi-mcp</text>
+  <text class="s" x="300" y="108">escolhe a ferramenta; modelos, DAX, visuais</text>
 
-  <rect class="skill" x="285" y="164" width="310" height="62" rx="10"/>
-  <text class="h" x="300" y="189">power-bi-dax-optimization</text>
-  <text class="s" x="300" y="209">DAX mais rápido e legível</text>
+  <rect class="skill" x="285" y="130" width="310" height="56" rx="10"/>
+  <text class="h" x="300" y="154">power-bi-dax-optimization</text>
+  <text class="s" x="300" y="174">DAX mais rápido e legível</text>
 
-  <rect class="skill" x="285" y="240" width="310" height="62" rx="10"/>
-  <text class="h" x="300" y="265">power-bi-screenshot</text>
-  <text class="s" x="300" y="285">confere o resultado na tela</text>
+  <rect class="skill" x="285" y="196" width="310" height="56" rx="10"/>
+  <text class="h" x="300" y="220">power-bi-screenshot</text>
+  <text class="s" x="300" y="240">confere o resultado na tela</text>
 
-  <rect class="mcp" x="285" y="322" width="310" height="62" rx="10"/>
-  <text class="h" x="300" y="347">powerbi-modeling-mcp</text>
-  <text class="s" x="300" y="367">servidor da Microsoft, iniciado com npx</text>
+  <rect class="skill" x="285" y="262" width="310" height="56" rx="10"/>
+  <text class="h" x="300" y="286">powerbi-setup</text>
+  <text class="s" x="300" y="306">instalação guiada e verificação</text>
+
+  <rect class="mcp" x="285" y="344" width="310" height="62" rx="10"/>
+  <text class="h" x="300" y="369">powerbi-modeling-mcp</text>
+  <text class="s" x="300" y="389">servidor da Microsoft, iniciado com npx</text>
 
   <rect class="card" x="700" y="48" width="230" height="96" rx="12"/>
   <text class="h" x="715" y="80">Power BI Desktop</text>
@@ -62,9 +66,8 @@
   <text class="s" x="715" y="368">(publicação e atualização)</text>
 
   <path class="flow" d="M200 215 H260"/>
-  <path class="flow flow-d" d="M595 353 C650 353 650 96 700 96"/>
-  <path class="flow flow-d" d="M595 353 C650 353 650 220 700 220"/>
-  <path class="flow flow-d" d="M595 353 C650 353 650 344 700 344"/>
-  <path class="flow" d="M595 271 C660 271 660 130 700 118"/>
-
+  <path class="flow flow-d" d="M595 375 C650 375 650 96 700 96"/>
+  <path class="flow flow-d" d="M595 375 C650 375 650 220 700 220"/>
+  <path class="flow flow-d" d="M595 375 C650 375 650 344 700 344"/>
+  <path class="flow" d="M595 224 C660 224 660 130 700 118"/>
 </svg>
