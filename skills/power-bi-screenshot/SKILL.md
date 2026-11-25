@@ -105,6 +105,12 @@ It copies the area of the screen where the window is, after bringing the window 
 - All four scripts declare that they respect the screen scaling. Without it, a screen scaled above 100% puts the cursor and the crop in the wrong place.
 - The images may contain data: save them in a temporary folder and delete them when the check is done.
 
+## Tips from real use
+
+- **Wait for the report to finish loading before hovering.** After reopening Desktop, poll the CPU of `PBIDesktop` plus `msmdsrv` until it changes by less than 0.4 s over 3 s, twice in a row. A hover sent earlier misses the target or finds visuals still blank. **Motivation:** a hover on a half-loaded page looks like "the tooltip does not work" and sends the check down the wrong path.
+- **Open a page without clicking:** set `activePageName` in `<name>.Report/definition/pages/pages.json` to the internal id of the page and reopen the `.pbip`. This also opens hidden pages such as tooltip pages, showing their layout with sample data, which is enough to judge alignment and clipped values. Put the field back afterwards. **Motivation:** a report with many pages has a tab bar whose arrows jump several tabs per click, so aiming at one page by clicking is unreliable.
+- **Closing Desktop by force is safe when nothing is unsaved**, but the next start shows an "automatic recovery" banner. Dismiss it and do not open the recovered files. **Motivation:** the banner looks like damage, and opening the recovered files could replace the version on disk.
+
 ## What was tested
 
 The four scripts were run against a neutral test window with a button, a bar with a tooltip and a scrolling list, which logged the real mouse events it received. Hover reached the bar and the tooltip appeared in the image, the click changed the page, the wheel scrolled the list, the cursor was given back, and every image had the exact size of the window. That run also found and fixed two defects: a missing DPI declaration, and the choice of a leftover tooltip as the window to capture.
