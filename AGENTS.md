@@ -15,6 +15,7 @@ Plugin do Claude Code para Power BI: servidor MCP da Microsoft (`.mcp.json`, via
 - `skills/powerbi-mcp/`: `SKILL.md` e `references/` (24 arquivos). Origem: `semantic-model-authoring` da Microsoft, traduzida, limpa e estendida.
 - `skills/power-bi-dax-optimization/`: cópia sem mudanças da skill do `github/awesome-copilot`.
 - `skills/power-bi-screenshot/`: `SKILL.md` e `scripts/capture-screenshot.ps1`.
+- `README.md` (inglês, principal) e `README.pt-BR.md` (português). Imagens em `docs/`; os diagramas em português ficam em `docs/pt-BR/` (gerados a partir dos SVGs em inglês).
 - `LICENSE` (MIT do dono) e `NOTICE` (créditos e texto MIT de Microsoft e GitHub).
 
 ## Comandos
@@ -46,6 +47,8 @@ Plugin do Claude Code para Power BI: servidor MCP da Microsoft (`.mcp.json`, via
    | Verificado e sucesso | `#2E9E6B` | `#4CC38A` |
 
    Diagramas em SVG com `prefers-color-scheme`, título e descrição para leitores de tela. Texto sempre em SVG, nunca dentro de imagem gerada por IA (os geradores erram acentos e palavras); imagens do Gemini ficam sem texto, sem logotipo da Microsoft e sem o amarelo e preto da marca Power BI. Cores num lugar só (variáveis CSS). **Motivação:** cada projeto visual pessoal tem identidade própria aprovada pelo dono (regra 1 do `AGENTS.md` pessoal). O índigo dá identidade própria, o âmbar lembra painéis de dados sem imitar a marca e o verde fica reservado para "conferido". Evitar o amarelo e preto evita parecer produto oficial da Microsoft.
+
+8. **Os dois READMEs andam juntos.** Qualquer mudança em `README.md` entra em `README.pt-BR.md` no mesmo commit, e mudança num diagrama de `docs/` exige refazer o de `docs/pt-BR/` (texto do diagrama traduzido, conferido renderizado para não cortar). A descrição do repositório no GitHub (campo About) fica em português. **Motivação:** duas versões que divergem fazem o leitor de uma delas seguir instruções velhas ou erradas, e texto em português mais longo corta dentro das caixas do SVG.
 
 ## Referência
 - AGENTS.md global (`~/AGENTS.md`) e pessoal (`~/armandonettox/AGENTS.md`): regras gerais de commits (em português, sem atribuição de IA), comentários, emojis e nomes.

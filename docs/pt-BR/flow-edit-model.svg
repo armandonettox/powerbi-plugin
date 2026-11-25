@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 300" role="img" aria-labelledby="t d">
+  <title id="t">Fluxo de alteração de um modelo do Power BI com o plugin</title>
+  <desc id="d">Cinco etapas: você pede em linguagem natural; a skill confere se o modelo pertence ao contexto atual; conecta ao modelo aberto; altera e valida com uma consulta DAX; e pergunta a você antes de qualquer atualização ou gravação.</desc>
+  <style>
+    :root { --bg:#F7F8FA; --ink:#1A1F2B; --muted:#5A6272; --accent:#4F5BD5; --data:#E8A317; --ok:#2E9E6B; --card:#FFFFFF; --line:#C9CEDA; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg:#12151C; --ink:#E8EAF0; --muted:#A5ACBC; --accent:#8B93F0; --data:#F2B84B; --ok:#4CC38A; --card:#1B2030; --line:#3A4157; }
+    }
+    text { font-family: Inter, "Segoe UI", system-ui, sans-serif; fill: var(--ink); }
+    .bg { fill: var(--bg); }
+    .step { fill: var(--card); stroke: var(--line); stroke-width: 1.5; }
+    .gate { fill: var(--card); stroke: var(--data); stroke-width: 2.5; }
+    .final { fill: var(--card); stroke: var(--ok); stroke-width: 2.5; }
+    .num { font-size: 13px; font-weight: 700; fill: var(--accent); }
+    .h { font-size: 14.5px; font-weight: 700; }
+    .s { font-size: 12px; fill: var(--muted); }
+    .track { fill: none; stroke: var(--line); stroke-width: 3; }
+    .dot { fill: var(--accent); }
+    .tag { font-size: 11.5px; font-weight: 700; fill: var(--data); }
+    .tag-ok { fill: var(--ok); }
+    @media (prefers-reduced-motion: reduce) { .dot { display: none; } }
+  </style>
+  <rect class="bg" width="960" height="300" rx="16"/>
+
+  <path id="track" class="track" d="M110 238 H850"/>
+
+  <rect class="step" x="24" y="88" width="172" height="124" rx="12"/>
+  <text class="num" x="40" y="114">1</text>
+  <text class="h" x="40" y="138">Você pede</text>
+  <text class="s" x="40" y="160">em linguagem natural,</text>
+  <text class="s" x="40" y="178">por exemplo, uma</text>
+  <text class="s" x="40" y="196">medida nova</text>
+
+  <rect class="gate" x="208" y="88" width="172" height="124" rx="12"/>
+  <text class="num" x="224" y="114">2</text>
+  <text class="h" x="224" y="138">Checa o contexto</text>
+  <text class="s" x="224" y="160">para e pergunta se o</text>
+  <text class="s" x="224" y="178">modelo parece ser</text>
+  <text class="s" x="224" y="196">de outro contexto</text>
+  <text class="tag" x="224" y="82">TRAVA</text>
+
+  <rect class="step" x="392" y="88" width="172" height="124" rx="12"/>
+  <text class="num" x="408" y="114">3</text>
+  <text class="h" x="408" y="138">Conecta</text>
+  <text class="s" x="408" y="160">acha o Desktop aberto</text>
+  <text class="s" x="408" y="178">e conecta na porta</text>
+  <text class="s" x="408" y="196">dele</text>
+
+  <rect class="step" x="576" y="88" width="172" height="124" rx="12"/>
+  <text class="num" x="592" y="114">4</text>
+  <text class="h" x="592" y="138">Altera e testa</text>
+  <text class="s" x="592" y="160">edita pelo MCP e</text>
+  <text class="s" x="592" y="178">confere o resultado</text>
+  <text class="s" x="592" y="196">com uma consulta DAX</text>
+
+  <rect class="final" x="760" y="88" width="176" height="124" rx="12"/>
+  <text class="num" x="776" y="114">5</text>
+  <text class="h" x="776" y="138">Você confirma</text>
+  <text class="s" x="776" y="160">pede antes de atualizar</text>
+  <text class="s" x="776" y="178">ou salvar, nunca por</text>
+  <text class="s" x="776" y="196">conta própria</text>
+  <text class="tag tag-ok" x="776" y="82">CONFIRMAÇÃO</text>
+
+  <circle class="dot" r="7">
+    <animateMotion dur="7s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
+      <mpath href="#track"/>
+    </animateMotion>
+  </circle>
+
+  <text class="s" x="480" y="278" text-anchor="middle">Nada chega aos seus dados sem passar pela trava e pela sua confirmação.</text>
+</svg>

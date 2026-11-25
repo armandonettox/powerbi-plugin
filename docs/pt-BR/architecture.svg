@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 440" role="img" aria-labelledby="t d">
+  <title id="t">Como o plugin powerbi liga o Claude Code ao Power BI</title>
+  <desc id="d">O Claude Code usa três skills e o servidor MCP de modelagem do Power BI que vêm no plugin. O servidor lê e altera um modelo aberto no Power BI Desktop, arquivos PBIP e TMDL em disco ou um workspace do Fabric. A skill de captura registra a janela do Desktop.</desc>
+  <style>
+    :root { --bg:#F7F8FA; --ink:#1A1F2B; --muted:#5A6272; --accent:#4F5BD5; --data:#E8A317; --ok:#2E9E6B; --card:#FFFFFF; --line:#C9CEDA; --accent-soft:#E9EBFB; --data-soft:#FCF2DA; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg:#12151C; --ink:#E8EAF0; --muted:#A5ACBC; --accent:#8B93F0; --data:#F2B84B; --ok:#4CC38A; --card:#1B2030; --line:#3A4157; --accent-soft:#232A4A; --data-soft:#3A3020; }
+    }
+    text { font-family: Inter, "Segoe UI", system-ui, sans-serif; fill: var(--ink); }
+    .bg { fill: var(--bg); }
+    .card { fill: var(--card); stroke: var(--line); stroke-width: 1.5; }
+    .plugin { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2; stroke-dasharray: 6 5; }
+    .skill { fill: var(--card); stroke: var(--accent); stroke-width: 1.5; }
+    .mcp { fill: var(--data-soft); stroke: var(--data); stroke-width: 2; }
+    .h { font-size: 15px; font-weight: 700; }
+    .s { font-size: 12.5px; fill: var(--muted); }
+    .lbl { font-size: 12px; font-weight: 600; fill: var(--accent); }
+    .flow { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-dasharray: 8 7; animation: dash 1.4s linear infinite; }
+    .flow-d { stroke: var(--data); }
+    @keyframes dash { to { stroke-dashoffset: -30; } }
+    @media (prefers-reduced-motion: reduce) { .flow { animation: none; } }
+  </style>
+  <rect class="bg" width="960" height="440" rx="16"/>
+
+  <rect class="card" x="30" y="150" width="170" height="130" rx="12"/>
+  <text class="h" x="115" y="205" text-anchor="middle">Claude Code</text>
+  <text class="s" x="115" y="228" text-anchor="middle">seu pedido em</text>
+  <text class="s" x="115" y="246" text-anchor="middle">linguagem natural</text>
+
+  <rect class="plugin" x="260" y="40" width="360" height="360" rx="16"/>
+  <text class="lbl" x="280" y="68">plugin powerbi</text>
+
+  <rect class="skill" x="285" y="88" width="310" height="62" rx="10"/>
+  <text class="h" x="300" y="113">powerbi-mcp</text>
+  <text class="s" x="300" y="133">escolhe a ferramenta; modelos, DAX, visuais</text>
+
+  <rect class="skill" x="285" y="164" width="310" height="62" rx="10"/>
+  <text class="h" x="300" y="189">power-bi-dax-optimization</text>
+  <text class="s" x="300" y="209">DAX mais rápido e legível</text>
+
+  <rect class="skill" x="285" y="240" width="310" height="62" rx="10"/>
+  <text class="h" x="300" y="265">power-bi-screenshot</text>
+  <text class="s" x="300" y="285">confere o resultado na tela</text>
+
+  <rect class="mcp" x="285" y="322" width="310" height="62" rx="10"/>
+  <text class="h" x="300" y="347">powerbi-modeling-mcp</text>
+  <text class="s" x="300" y="367">servidor da Microsoft, iniciado com npx</text>
+
+  <rect class="card" x="700" y="48" width="230" height="96" rx="12"/>
+  <text class="h" x="715" y="80">Power BI Desktop</text>
+  <text class="s" x="715" y="102">modelo aberto na sua máquina</text>
+  <text class="s" x="715" y="120">(alterações e consultas ao vivo)</text>
+
+  <rect class="card" x="700" y="172" width="230" height="96" rx="12"/>
+  <text class="h" x="715" y="204">Arquivos PBIP e TMDL</text>
+  <text class="s" x="715" y="226">pastas de projeto em disco</text>
+  <text class="s" x="715" y="244">(JSON do relatório e modelo)</text>
+
+  <rect class="card" x="700" y="296" width="230" height="96" rx="12"/>
+  <text class="h" x="715" y="328">Workspace do Fabric</text>
+  <text class="s" x="715" y="350">modelos semânticos no serviço</text>
+  <text class="s" x="715" y="368">(publicação e atualização)</text>
+
+  <path class="flow" d="M200 215 H260"/>
+  <path class="flow flow-d" d="M595 353 C650 353 650 96 700 96"/>
+  <path class="flow flow-d" d="M595 353 C650 353 650 220 700 220"/>
+  <path class="flow flow-d" d="M595 353 C650 353 650 344 700 344"/>
+  <path class="flow" d="M595 271 C660 271 660 130 700 118"/>
+
+</svg>

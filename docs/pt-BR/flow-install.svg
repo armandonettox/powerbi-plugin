@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 300" role="img" aria-labelledby="t d">
+  <title id="t">Instalando o plugin powerbi</title>
+  <desc id="d">Quatro etapas: adicione o marketplace, instale o plugin, aceite você mesmo o contrato de licença da Microsoft e depois peça ao Claude algo sobre o seu modelo.</desc>
+  <style>
+    :root { --bg:#F7F8FA; --ink:#1A1F2B; --muted:#5A6272; --accent:#4F5BD5; --data:#E8A317; --ok:#2E9E6B; --card:#FFFFFF; --line:#C9CEDA; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg:#12151C; --ink:#E8EAF0; --muted:#A5ACBC; --accent:#8B93F0; --data:#F2B84B; --ok:#4CC38A; --card:#1B2030; --line:#3A4157; }
+    }
+    text { font-family: Inter, "Segoe UI", system-ui, sans-serif; fill: var(--ink); }
+    .bg { fill: var(--bg); }
+    .step { fill: var(--card); stroke: var(--line); stroke-width: 1.5; }
+    .gate { fill: var(--card); stroke: var(--data); stroke-width: 2.5; }
+    .final { fill: var(--card); stroke: var(--ok); stroke-width: 2.5; }
+    .num { font-size: 13px; font-weight: 700; fill: var(--accent); }
+    .h { font-size: 14.5px; font-weight: 700; }
+    .s { font-size: 12px; fill: var(--muted); }
+    .code { font-family: "Cascadia Mono", Consolas, monospace; font-size: 11px; fill: var(--ink); }
+    .track { fill: none; stroke: var(--line); stroke-width: 3; }
+    .dot { fill: var(--accent); }
+    .tag { font-size: 11.5px; font-weight: 700; fill: var(--data); }
+    .tag-ok { fill: var(--ok); }
+    @media (prefers-reduced-motion: reduce) { .dot { display: none; } }
+  </style>
+  <rect class="bg" width="960" height="300" rx="16"/>
+
+  <path id="track" class="track" d="M110 238 H850"/>
+
+  <rect class="step" x="24" y="76" width="212" height="136" rx="12"/>
+  <text class="num" x="40" y="102">1</text>
+  <text class="h" x="40" y="126">Adicione o marketplace</text>
+  <text class="code" x="40" y="152">/plugin marketplace add</text>
+  <text class="code" x="40" y="170">armandonettox/powerbi-plugin</text>
+
+  <rect class="step" x="252" y="76" width="212" height="136" rx="12"/>
+  <text class="num" x="268" y="102">2</text>
+  <text class="h" x="268" y="126">Instale o plugin</text>
+  <text class="code" x="268" y="152">/plugin install</text>
+  <text class="code" x="268" y="170">powerbi@powerbi-plugin</text>
+
+  <rect class="gate" x="480" y="76" width="236" height="136" rx="12"/>
+  <text class="num" x="496" y="102">3</text>
+  <text class="h" x="496" y="126">Aceite o EULA</text>
+  <text class="s" x="496" y="150">Você lê e você aceita:</text>
+  <text class="s" x="496" y="168">variável de ambiente, flag ou</text>
+  <text class="s" x="496" y="186">a ferramenta accept_eula</text>
+  <text class="tag" x="496" y="70">SUA DECISÃO</text>
+
+  <rect class="final" x="732" y="76" width="204" height="136" rx="12"/>
+  <text class="num" x="748" y="102">4</text>
+  <text class="h" x="748" y="126">Peça ao Claude</text>
+  <text class="s" x="748" y="150">abra um modelo no Desktop</text>
+  <text class="s" x="748" y="168">e peça em linguagem natural</text>
+  <text class="tag tag-ok" x="748" y="70">PRONTO</text>
+
+  <circle class="dot" r="7">
+    <animateMotion dur="7s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
+      <mpath href="#track"/>
+    </animateMotion>
+  </circle>
+
+  <text class="s" x="480" y="278" text-anchor="middle">O plugin nunca aceita a licença por você.</text>
+</svg>

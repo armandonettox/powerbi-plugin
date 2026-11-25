@@ -1,4 +1,8 @@
 <p align="center">
+  <a href="README.pt-BR.md">Português (Brasil)</a> | <b>English</b>
+</p>
+
+<p align="center">
   <img src="docs/cover.png" alt="Illustration of a data model with linked tables feeding a dashboard" width="760">
 </p>
 
