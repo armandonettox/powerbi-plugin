@@ -55,8 +55,9 @@ Se as skills ou o servidor MCP não aparecerem logo depois de instalar, reinicie
 Prefere que um agente faça isso? Cole no seu agente:
 
 ```text
-Instale o plugin do Power BI neste computador seguindo as instruções de
+Instale o plugin do Power BI neste computador. Baixe o texto completo de
 https://raw.githubusercontent.com/armandonettox/powerbi-plugin/main/skills/powerbi-setup/SKILL.md
+com curl (não use uma ferramenta que resume páginas da web), leia tudo e siga.
 Diga o que vai alterar antes de alterar e não aceite nenhum contrato de licença por mim.
 ```
 

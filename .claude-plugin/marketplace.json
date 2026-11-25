@@ -9,7 +9,7 @@
       "name": "powerbi",
       "description": "Author and inspect Power BI semantic models and report visuals, optimize DAX, and check the result with Desktop screenshots.",
       "source": "./",
-      "version": "0.4.4",
+      "version": "0.4.5",
       "license": "MIT",
       "keywords": ["powerbi", "dax", "semantic-model", "mcp", "skill"]
     }

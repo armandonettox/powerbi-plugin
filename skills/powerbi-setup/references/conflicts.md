@@ -6,7 +6,7 @@ Goal: when setup ends, the powerbi plugin is the **only active provider** of Pow
 
 1. **The plugin is the primary one.** Two things that provide the same capability must not stay active together: the agent can pick the old one while the user believes the plugin is working. If the user declines a replacement, say plainly that both stay active and that setup is not complete in that respect.
 2. **Nothing is deleted.** Skills are moved to a backup folder, plugins are disabled, and MCP entries are copied to the backup before they are removed. Everything is reversible with the commands in `RESTORE.md`.
-3. **Nothing changes before the user confirms an exact list.** Show every item with its location and the action you propose, then ask once.
+3. **Nothing changes before the user confirms an exact list.** Show every item with its name, its location, the action you propose and the backup folder, then ask one separate question: "Apply exactly this?". A "yes" to an earlier, general "do you want to proceed?" is not that confirmation, and neither is describing the steps and running them in the same message: wait for an answer sent after the list.
 4. **Things that only use Power BI are not conflicts.** A skill that builds a monthly report from a model is a task that depends on the plugin. Keep it untouched.
 5. **Never print secrets.** The detector hides environment values; when you copy an MCP entry to the backup, do not echo it back into the conversation.
 
@@ -37,6 +37,8 @@ Make one folder for this run and keep everything in it:
 $backup = Join-Path $env:USERPROFILE (".claude\backups\powerbi-plugin-" + (Get-Date -Format "yyyyMMdd-HHmmss"))
 New-Item -ItemType Directory -Force $backup | Out-Null
 ```
+
+In bash the same is `backup="$HOME/.claude/backups/powerbi-plugin-$(date +%Y%m%d-%H%M%S)"; mkdir -p "$backup"`, and a skill folder is moved with `mv "<path>" "$backup/skills/"` (create `$backup/skills` first). Removing a symlink or a junction is the one step to run in PowerShell even from bash: `powershell -NoProfile -Command "[System.IO.Directory]::Delete('<link>')"`, because that call is the one checked to leave the target untouched.
 
 - **Skill folder:** move the whole folder into `$backup\skills\` with `Move-Item`. If it is a symlink or a junction, record where it points (`(Get-Item <path>).Target`), then remove only the link with `[System.IO.Directory]::Delete('<link>')`, which removes the link and leaves the folder it points to untouched (checked in PowerShell 7 and in Windows PowerShell 5.1).
 - **MCP entry:** do **not** run `claude mcp get <name>` in the conversation: it prints the values of `env`, which may be secrets. Use the helper, which copies the entry without printing it and writes a restore script:

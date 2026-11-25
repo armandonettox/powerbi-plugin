@@ -74,7 +74,8 @@ child.stdout.on("data", (chunk) => {
     } else if (message.id === 2 && message.result) {
       clearTimeout(timer);
       const names = (message.result.tools || []).map((tool) => tool.name);
-      stop(0, `OK: server ${version} started and lists ${names.length} tools.\n${names.join(", ")}`);
+      const eula = names.includes("accept_eula") ? "listed" : "NOT listed";
+      stop(0, `OK: server ${version} started and lists ${names.length} tools. The accept_eula tool is ${eula}.\n${names.join(", ")}`);
     } else if (message.error) {
       clearTimeout(timer);
       stop(1, `FAIL: the server answered with an error: ${JSON.stringify(message.error).slice(0, 400)}`);
