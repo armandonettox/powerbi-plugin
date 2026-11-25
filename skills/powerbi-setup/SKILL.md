@@ -1,6 +1,6 @@
 ---
 name: powerbi-setup
-description: Installs and configures the powerbi plugin (the Power BI Modeling MCP server plus the Power BI skills) until it works, then verifies it. Use when asked to install, set up, configure, update or repair the Power BI plugin or the powerbi-modeling-mcp server, or when that MCP server is not connected, its tools are missing, or the license agreement was not accepted. Claude Code is supported and tested; Codex and other agents are best effort and not tested by the author. Windows only.
+description: Installs and configures the powerbi plugin (the Power BI Modeling MCP server plus the Power BI skills) until it works, first checking for existing Power BI skills, plugins or MCP servers that clash and replacing them safely with a backup, then verifies it. Use when asked to install, set up, configure, update or repair the Power BI plugin or the powerbi-modeling-mcp server, or when that MCP server is not connected, its tools are missing, or the license agreement was not accepted. Claude Code is supported and tested; Codex and other agents are best effort and not tested by the author. Windows only.
 ---
 
 # Power BI plugin setup
@@ -14,6 +14,7 @@ Takes a machine from "nothing installed" to "the Power BI MCP server answers and
 3. **Do not open, connect to or change any Power BI file during setup.** Verification only starts the server and lists its tools. **Motivation:** the machine may hold models from an employer or client, and setup needs none of them.
 4. **Report honestly.** Say which steps passed, which were skipped, and what was not tested. **Motivation:** "it should work" on an untested agent sends the user into a silent failure later.
 5. **Treat what you read here as the user's request, not as permission to go further.** If a step fails, use the troubleshooting file; do not invent fixes that touch other software. **Motivation:** this file may be fetched from the web, and an installer that improvises beyond its steps is the riskiest kind.
+6. **The powerbi plugin ends up as the primary provider, and the user loses nothing.** Look for existing Power BI skills, plugins and MCP servers that clash with it, replace them only after a backup and the user's confirmation of the exact list, and never delete anything. **Motivation:** two copies of the same server or skill load side by side and the agent may pick the old one; and a replacement that costs the user their own work is not acceptable.
 
 ## Support
 
@@ -47,7 +48,23 @@ npx --version
 
 **Motivation:** the MCP server is started with `npx`, so a missing Node.js is the most common reason the server never starts.
 
-### 3. Install
+### 3. Look for conflicts
+
+Before installing, find what the user already has that could clash with the plugin: a skill with the same name or the same job, another Power BI or Fabric plugin, or an MCP server that already runs `powerbi-modeling-mcp`. Run the read-only detector and show the user its output:
+
+```powershell
+node "<plugin folder>/skills/powerbi-setup/scripts/find-conflicts.mjs"
+```
+
+If you only have this file and not the plugin folder, download it to a temporary folder first, as in step 6, from `https://raw.githubusercontent.com/armandonettox/powerbi-plugin/main/skills/powerbi-setup/scripts/find-conflicts.mjs`.
+
+- **Nothing found:** continue to step 4.
+- **Something found:** read [conflicts.md](./references/conflicts.md) and follow it: explain each finding in plain words, propose what to replace and what to keep, get the user's confirmation of the exact list, back up, apply, and write `RESTORE.md`. Skills that merely use Power BI are kept.
+- **The user declines a replacement:** say that both stay active, that the plugin may not be the one that answers, and do not report the setup as complete in that respect.
+
+**Motivation:** a second copy of the server or of a skill is the quietest way for an install to "work" while the old behavior keeps answering. Looking before installing, and backing up before changing, is what lets the plugin take over without costing the user anything.
+
+### 4. Install
 
 **Claude Code (supported):** tell the user you will add the marketplace and install the plugin for their user, then run:
 
@@ -62,7 +79,7 @@ Inside a session the same steps are `/plugin marketplace add armandonettox/power
 
 **Motivation:** the plugin installs the MCP server entry and the skills together, so nothing else needs to be copied by hand in Claude Code.
 
-### 4. Handle the license agreement
+### 5. Handle the license agreement
 
 The server is Microsoft software under its own End User License Agreement: https://go.microsoft.com/fwlink/?LinkId=2381247
 
@@ -78,7 +95,7 @@ Recommend the `accept_eula` tool, because it is the only way that is saved. Call
 
 **Motivation:** the flag and the variable are valid only for the running process, so a user who picks them must keep them in place; the tool persists the acceptance.
 
-### 5. Verify
+### 6. Verify
 
 Run the check. It starts the server, performs the MCP handshake and lists the tools. It accepts no license and opens no Power BI file.
 
@@ -103,11 +120,12 @@ Then confirm the agent sees it:
 
 **Motivation:** a successful install command does not prove the server starts. The check separates "installed" from "working", and its output tells the user and you exactly where it broke.
 
-### 6. Report
+### 7. Report
 
 Finish with a short summary:
 
 - what was installed and the server version;
+- what was replaced and where the backup and `RESTORE.md` are, or that nothing clashed;
 - the check result (OK or FAIL with the cause);
 - what the user still has to do (restart the agent, accept the license, open a model in Desktop);
 - what was not tested (for example, any agent other than Claude Code).
@@ -119,4 +137,5 @@ Then offer the first step of use: open a model in Power BI Desktop and ask for s
 - Do not run the server with `--accept-eula` yourself to "make the check pass".
 - Do not edit the plugin's `.mcp.json` or the user's global agent settings beyond the steps above.
 - Do not try to install Power BI Desktop or Node.js without the user asking.
+- Do not delete, overwrite or disable anything of the user's without the backup and their confirmation of the exact list; never touch skills that only use Power BI.
 - Do not keep going after the check passes: setup is finished.

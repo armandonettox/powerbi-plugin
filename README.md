@@ -60,7 +60,9 @@ https://raw.githubusercontent.com/armandonettox/powerbi-plugin/main/skills/power
 Tell me what you will change before you change it, and do not accept any license agreement for me.
 ```
 
-The agent reads the `powerbi-setup` skill, checks Node.js, installs, asks you to read and accept the Microsoft license yourself, and ends by running a check that proves the server starts.
+The agent reads the `powerbi-setup` skill, checks Node.js, **looks for Power BI skills, plugins or MCP servers you already have that would clash**, installs, asks you to read and accept the Microsoft license yourself, and ends by running a check that proves the server starts.
+
+If something clashes, the plugin becomes the one that answers, and you lose nothing: the agent shows you the exact list first, backs everything up, only moves, disables or copies (it never deletes), and writes a `RESTORE.md` with the commands to undo each change. Skills of your own that merely use Power BI are left alone.
 
 | Agent | Status |
 |---|---|
