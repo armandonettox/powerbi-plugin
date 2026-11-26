@@ -68,7 +68,8 @@ Se algo entrar em conflito, o plugin passa a ser o que responde e você não per
 | Agente | Situação |
 |---|---|
 | Claude Code | Suportado e testado |
-| Codex e outros agentes | Melhor esforço, não testado pelo autor. A skill traz os passos e sempre termina com a mesma verificação, que diz se funcionou. |
+| Codex | Melhor esforço. Só a etapa de configuração foi testada (`codex mcp add` e onde o arquivo fica), não a partida do servidor dentro do Codex. |
+| Outros agentes | Melhor esforço, não testado pelo autor. A skill traz os passos e sempre termina com a mesma verificação, que diz se funcionou. |
 
 O link aponta para um arquivo deste repositório. Abra antes, se quiser ver o que o seu agente vai receber como instrução.
 

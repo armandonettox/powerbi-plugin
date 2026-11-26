@@ -68,7 +68,8 @@ If something clashes, the plugin becomes the one that answers, and you lose noth
 | Agent | Status |
 |---|---|
 | Claude Code | Supported and tested |
-| Codex and other agents | Best effort, not tested by the author. The skill gives the steps and always ends with the same check, which tells you whether it worked. |
+| Codex | Best effort. Only the configuration step was tested (`codex mcp add` and where the file goes), not starting the server inside Codex. |
+| Other agents | Best effort, not tested by the author. The skill gives the steps and always ends with the same check, which tells you whether it worked. |
 
 The link points to a file in this repository. Open it first if you want to see what your agent will be told to do.
 

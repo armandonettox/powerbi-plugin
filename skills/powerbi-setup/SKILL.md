@@ -23,7 +23,8 @@ Takes a machine from "nothing installed" to "the Power BI MCP server answers and
 | Agent | Status |
 |---|---|
 | Claude Code | Supported and tested. |
-| Codex and other agents | Best effort, not tested by the author. Follow [agents.md](./references/agents.md) and let the check decide. |
+| Codex | Best effort. Only its configuration step was tested by the author (`codex mcp add` and where the file goes); starting the server inside Codex was not. Follow [agents.md](./references/agents.md) and let the check decide. |
+| Other agents | Best effort, not tested by the author. Same procedure. |
 
 ## Shell
 

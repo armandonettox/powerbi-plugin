@@ -40,11 +40,17 @@ args = ["/c", "npx", "-y", "@microsoft/powerbi-modeling-mcp@1.0.1", "--start"]
 startup_timeout_sec = 120
 ```
 
-What could not be confirmed:
+**Tested** by the author on Codex 0.172.0 on Windows, for the **configuration only**:
 
-- **Where the file is on Windows.** Sources disagree (`%USERPROFILE%\.codex\config.toml` and `%APPDATA%\codex\config.toml` both appear). After `codex mcp add`, look at which of the two files now exists and edit that one.
-- **Whether `cmd /c` is needed.** It is what works for Claude Code on Windows. If Codex fails with `spawn npx ENOENT` or similar, try `command = "npx"` with `args = ["-y", "@microsoft/powerbi-modeling-mcp@1.0.1", "--start"]`.
+- `codex mcp add ... -- cmd /c npx ...` works and writes exactly the `[mcp_servers.powerbi-modeling-mcp]` block above; `codex mcp list` shows it as `enabled`.
+- The file is `%USERPROFILE%\.codex\config.toml`, and the folder is created by the first `codex mcp add`. `%APPDATA%\codex` was not used. Setting `CODEX_HOME` moves the file; changing the `USERPROFILE` or `HOME` variables does not, because Codex still used the real profile.
+- `startup_timeout_sec` is read: `codex mcp get powerbi-modeling-mcp` prints it. `codex mcp list` does not validate keys (an invented key raised no error), so use `get` to confirm a key.
+
+**Not confirmed:**
+
+- **That Codex starts the server.** `list` only says `enabled`, and a real start needs a login that the test did not use. If it fails with `spawn npx ENOENT` or similar, try `command = "npx"` with `args = ["-y", "@microsoft/powerbi-modeling-mcp@1.0.1", "--start"]`.
 - **Start-up time.** The first run downloads the package, and start-up timeouts are reported on Windows, hence the larger `startup_timeout_sec`. Raise it if the first start still times out.
+- **The skills folder** `~/.codex/skills` (next section) comes from OpenAI's documentation and was not tried.
 
 A syntax error in the shared `config.toml` can break Codex for every project, so make a copy of the file before editing it by hand.
 
